@@ -12,6 +12,8 @@ const oldPointStructure = {
   10: ['Q', 'Z']
 };
 
+
+
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
 	let letterPoints = "";
@@ -32,18 +34,40 @@ function oldScrabbleScorer(word) {
 // your job is to finish writing these functions and variables that we've named //
 // don't change the names or your program won't work as expected. //
 
-let playerWord;
+
 
 function initialPrompt() {
    word = input.question("Let's play some scrabble! \nEnter a word to score: ");
-   console.log(oldScrabbleScorer(word));
+   // console.log(oldScrabbleScorer(word));
+   console.log(simpleScorer(word));
 };
 
 let newPointStructure;
 
-let simpleScorer;
 
-let vowelBonusScorer;
+let simpleScorerPoints = {
+   1: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K','L', 'M', 
+      'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+   };
+
+
+
+function simpleScorer(word) {
+	word = word.toUpperCase();
+   let simpleScoreLetters = "";
+	 
+	for (let i = 0; i < word.length; i++) {
+
+      for (let pointValue in simpleScorerPoints) {
+       if (simpleScorerPoints[pointValue].includes(word[i])) {
+			simpleScoreLetters += `Points for '${word[i]}': ${pointValue}\n`
+      }
+  } 
+}  return simpleScoreLetters;
+};
+
+let vowelBonusScorer = "";
+
 
 let scrabbleScorer;
 
