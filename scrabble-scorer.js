@@ -14,6 +14,7 @@ const oldPointStructure = {
 
 
 
+
       /*This is the original scorer function we were provided-- I just added a totalScore variable so I could 
       print the results to the user along with the individual points for each letter in the word. 
       */
@@ -34,8 +35,8 @@ function oldScrabbleScorer(word) {
 
 	  }
 	}
-	// return letterPoints 
-   return `You scored ${Number(totalScore)} points! \n ${letterPoints}`;
+	return Number(totalScore);
+   // return `You scored ${Number(totalScore)} points! \n ${letterPoints}`;
  }
 
 
@@ -66,10 +67,27 @@ function initialPrompt() {
 };
 
 
+//-------------------------------------------------------------------------------------------------------------------------------
 
+      /* ----TASK 4----//
+      Could I make a loop that goes over the values for each key in the oldScrabbleStructure and convert them into lowercase, and then,
+      take each individual elements(character) and turn into a key instead of a value. Would I be able to then assign that key the same name/var 
+      as it's previous key? I am going to need nested loops. One for...in loop and another for loop. Maybe a while loop...but I wouldn't know how to begin
+
+      EXAMPLE::: So, I for...loop over oldSrabbleStructure. Each time it hits a new property/key it takes the values and transforms them into keys while assigning the keys the 
+      value of the property/key that accessed it. 
+
+      BREAKDOWN::: Each key in oldscrabble is  key = point : value = letter
+      at each key of oldscrabble I need to get the letters out of the array, convert them to lowercase, and put them into a new object structure...
+      in for...in loop, we don't use index, we use the property/key. SO, loop over pointvalues, at each pointvalue take the letters in put into new object.
+
+      */
+
+
+let newKeys;
+let newPointStructure = {};
 function transform(oldPointStructure) {
-   let newPointStructure = {};
-   let newKeys;
+
 
    
    for (let property in oldPointStructure) {
@@ -89,29 +107,37 @@ function transform(oldPointStructure) {
 
 
 
-let newPointStructure = transform(oldPointStructure);
+
 
 
 function scrabbleScorer(word) {
-	word = word.toLowerCase();
+newPointStructure = transform(oldPointStructure);	
+   
+   word = word.toLowerCase();
 	let newPoints = "";
    let totalScore = 0;
  
   
-  for (let letter in newPointStructure) {
+  for (let newKeys in newPointStructure) {
 	for (let i = 0; i < word.length; i++) {
-      if(word[i].includes(newPointStructure[letter])) {
-         newPoints += `\nPoints for '${word[i]}': ${pointValue}`;
+      if(newPointStructure[newKeys].includes(word[i])) {
+
+
+
+         newPoints += `\nPoints for '${word[i]}': ${newPointStructure[pointValue]}`;
          totalScore += Number(pointValue);
          
       } 
 
 	  }
 	}
-   return `You scored ${totalScore} points! \n ${newPoints}`;
+   return Number(totalScore);
+   // return `Your word: ${word} scored ${totalScore} points! \n ${newPoints}`;
  }
 
+ 
 
+//---------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -134,22 +160,23 @@ let simpleScorerStructure = {
       */
 
 function simpleScorer(word) {
-	word = word.toUpperCase();
+	// word = word.toUpperCase();
    let simpleScorerPoints = "";
    let totalScore = 0;
 	 
-	for (let i = 0; i < word.length; i++) {
+   for (let i = 0; i < word.length; i++) {
 
       for (let pointValue in simpleScorerStructure) {
-       if (simpleScorerStructure[pointValue].includes(word[i])) {
-			simpleScorerPoints += `\nPoints for '${word[i]}': ${pointValue}`
-         totalScore += Number(pointValue);
-      }
-  } 
-} 
-// return simpleScorerPoints; 
-return `You scored ${totalScore} points! \n ${simpleScorerPoints}`;
 
+        if (simpleScorerStructure[pointValue].includes(word[i].toUpperCase())) {
+          simpleScorerPoints += `\nPoints for '${word[i]}': ${pointValue}` 
+          totalScore += Number(pointValue);  
+
+        }
+      }
+ } 
+ return Number(totalScore);
+ // return `Your word: ${word} scored ${Number(totalScore)} points! \n ${simpleScorerPoints}`;;
 };
 
       /*----TASK 2.2----//
@@ -183,8 +210,8 @@ function vowelBonusScorer(word) {
          }
   } 
 }  
-// return vowelBonusPoints;
-return `You scored ${totalScore} points! \n ${vowelBonusPoints}`;
+return totalScore;
+// return `Your word: ${word} scored ${totalScore} points! \n ${vowelBonusPoints}`;
 };
 
 
@@ -252,32 +279,26 @@ if (scoreChoice === "0") {
    }
 };
 
-
-
-
-
-
-      /* Could I make a loop that goes over the values for each key in the oldScrabbleStructure and convert them into lowercase, and then,
-      take each individual elements(character) and turn into a key instead of a value. Would I be able to then assign that key the same name/var 
-      as it's previous key? I am going to need nested loops. One for...in loop and another for loop. Maybe a while loop...but I wouldn't know how to begin
-
-      EXAMPLE::: So, I for...loop over oldSrabbleStructure. Each time it hits a new property/key it takes the values and transforms them into keys while assigning the keys the 
-      value of the property/key that accessed it. 
-
-      BREAKDOWN::: Each key in oldscrabble is  key = point : value = letter
-      at each key of oldscrabble I need to get the letters out of the array, convert them to lowercase, and put them into a new object structure...
-      in for...in loop, we don't use index, we use the property/key. SO, loop over pointvalues, at each pointvalue take the letters in put into new object.
-
-      */
-
-
-                     
+function keepPlayingPrompt() {
+   keepPlaying = input.question('Would you like to play another word? Yes or No? ');
+   keepPlaying = keepPlaying.toUpperCase;
+for (let i = 0; i < keepPlaying.length; i++) {
+   if (keepPlaying === 'YES') {      
+      word = input.question('Pick another word: ');
+              
+      
+   }  else {
+     break;
+   }
+}
+};                     
          
 
 
 function runProgram() {
    initialPrompt();
    scorerPrompt();
+   keepPlayingPrompt()
    
 }
 
