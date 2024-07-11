@@ -13,6 +13,7 @@ const oldPointStructure = {
 };
 
 
+
       /*This is the original scorer function we were provided-- I just added a totalScore variable so I could 
       print the results to the user along with the individual points for each letter in the word. 
       */
@@ -34,9 +35,8 @@ function oldScrabbleScorer(word) {
 	  }
 	}
 	// return letterPoints 
-   return totalScore + "\n" + letterPoints;
+   return `You scored ${Number(totalScore)} points! \n ${letterPoints}`;
  }
-
 
 
 
@@ -67,7 +67,49 @@ function initialPrompt() {
 
 
 
+function transform(oldPointStructure) {
+   let newPointStructure = {};
+   let newKeys;
+
+   
+   for (let property in oldPointStructure) {
+      // console.log(pointValue);
+       for (let i = 0; i < oldPointStructure[property].length; i++) {
+         newKeys = oldPointStructure[property];
+         // console.log(newKeys[i]);                                                          //shows that the letters are capitalized but looking like keys
+         
+         let makeLowerCase = newKeys[i].toLowerCase();
+         // console.log(makeLowerCase);                                                        
+         newPointStructure[makeLowerCase] = Number(property); 
+         
+       }
+   }
+   return newPointStructure;
+};
+
+
+
 let newPointStructure = transform(oldPointStructure);
+
+
+function scrabbleScorer(word) {
+	word = word.toLowerCase();
+	let newPoints = "";
+   let totalScore = 0;
+ 
+  
+  for (let letter in newPointStructure) {
+	for (let i = 0; i < word.length; i++) {
+      if(word[i].includes(newPointStructure[letter])) {
+         newPoints += `\nPoints for '${word[i]}': ${pointValue}`;
+         totalScore += Number(pointValue);
+         
+      } 
+
+	  }
+	}
+   return `You scored ${totalScore} points! \n ${newPoints}`;
+ }
 
 
 
@@ -106,7 +148,7 @@ function simpleScorer(word) {
   } 
 } 
 // return simpleScorerPoints; 
-return totalScore + "\n" + simpleScorerPoints;
+return `You scored ${totalScore} points! \n ${simpleScorerPoints}`;
 
 };
 
@@ -142,13 +184,9 @@ function vowelBonusScorer(word) {
   } 
 }  
 // return vowelBonusPoints;
-return totalScore + "\n" + vowelBonusPoints;
+return `You scored ${totalScore} points! \n ${vowelBonusPoints}`;
 };
 
-
-
-
-let scrabbleScorer;
 
 
 
@@ -171,7 +209,7 @@ const scoringAlgorithms = [
 { 
    name: 'Scrabble',
    description: 'The traditional scoring algorithm.',
-   scorerFunction: oldScrabbleScorer
+   scorerFunction: scrabbleScorer
 }
 
 ];
@@ -218,79 +256,24 @@ if (scoreChoice === "0") {
 
 
 
-function vowelBonusScorer(word) {
-   word = word.toUpperCase();
-   let vowelBonusPoints = "";
-   let totalScore = 0;
 
-   for (let i = 0; i < word.length; i++) {
+      /* Could I make a loop that goes over the values for each key in the oldScrabbleStructure and convert them into lowercase, and then,
+      take each individual elements(character) and turn into a key instead of a value. Would I be able to then assign that key the same name/var 
+      as it's previous key? I am going to need nested loops. One for...in loop and another for loop. Maybe a while loop...but I wouldn't know how to begin
 
-       for (let pointValue in vowelBonusStructure) {
- 
-         if (vowelBonusStructure[pointValue].includes(word[i])) {
-           vowelBonusPoints += `\nPoints for '${word[i]}': ${pointValue}` 
-           totalScore += Number(pointValue);  
+      EXAMPLE::: So, I for...loop over oldSrabbleStructure. Each time it hits a new property/key it takes the values and transforms them into keys while assigning the keys the 
+      value of the property/key that accessed it. 
 
-         }
-  } 
-}  
-// return vowelBonusPoints;
-return totalScore + "\n" + vowelBonusPoints;
+      BREAKDOWN::: Each key in oldscrabble is  key = point : value = letter
+      at each key of oldscrabble I need to get the letters out of the array, convert them to lowercase, and put them into a new object structure...
+      in for...in loop, we don't use index, we use the property/key. SO, loop over pointvalues, at each pointvalue take the letters in put into new object.
 
-}
+      */
 
 
-/* Could I make a loop that goes over the values for each key in the oldScrabbleStructure and convert them into lowercase, and then,
-take each individual elements(character) and turn into a key instead of a value. Would I be able to then assign that key the same name/var 
-as it's previous key?
-
-EXAMPLE::: So, I for...loop over oldSrabbleStructure. Each time it hits a new property/key it takes the values and transforms them into keys while assigning the keys the 
-value of the property/key that accessed it. 
-
-oldPointStructure[key][index]  ---  the [index] are the letters that we want to make keys in our newPointStructure and we want to assign their value to be the [key] they were accessed by
-
-
-      1: ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'],
-      2: ['D', 'G'],
-      3: ['B', 'C', 'M', 'P'],
-      4: ['F', 'H', 'V', 'W', 'Y'],
-      5: ['K'],
-      8: ['J', 'X'],
-      10: ['Q', 'Z']
-*/
-
-function transform(oldPointStructure) {
-   let newPoints;
-
-
-   for(let pointValue in oldPointStructure ) {                                      //to iterate over the keys 1, 2, 3, 4, 5, 8, 10 , which is 6 indexes
-    
-      for(let i = 0; i < oldPointStructure.length, i++;) {
+                     
          
-         newPoints += oldPointStructure[pointValue];
-         console.log(newPoints);                                 //means we are assigning newPoints to ----> object name : oldScrabbleStructure, iterating over the keys
 
-
-    
-      } 
-      }
-   return newPoints;
-
-};
-
-console.log(transform(oldPointStructure));
-
-
-// oldPointStructure[pointValue][i]   // isn't that saying point value is (the key) and then it will go through the indices within that property (the values array);
-
-
-console.log(transform(oldPointStructure['1']));
-// // console.log(oldPointStructure['2']);
-// // console.log(oldPointStructure['3']);
-// // console.log(oldPointStructure['4']);
-// // console.log(oldPointStructure['5']);
-// // console.log(oldPointStructure['8']);
-// // console.log(oldPointStructure['10']);
 
 function runProgram() {
    initialPrompt();
