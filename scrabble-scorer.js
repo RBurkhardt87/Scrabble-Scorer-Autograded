@@ -45,24 +45,30 @@ function oldScrabbleScorer(word) {
 // don't change the names or your program won't work as expected. //
 
 
+      /*----TASK 1----//
+      For the initial promt I just needed to set some if statements to validate the user input.
+      I wanted to make sure that they entered a single word, a word with no numbers and of course 
+      no numbers at all. It is weird to me that I had to make to conditions to rule out words with 
+      numbers in them and just outright numbers. The middle condition prevent words with numbers in 
+      them. EX: mom9 but it would like me enter 90. So I did the last condition to stop 90 from going 
+      through, but it would allow mom9 to work. So I left both inside the conditions. 
+      */
 
 function initialPrompt() {
    word = input.question("Let's play some scrabble! \nEnter a word to score: ");
+
+   for (let i = 0; i < word.length; i++) {
+   if(word.includes(" ") || !isNaN(word[i]) || word === Number) {
+      word = input.question("Invalid word. Please try again. Enter a single word with no numbers or spaces: \n");
+      
+   }
+   }
 };
 
 
 
-let newPointStructure;
-// newPointStructure = transform(oldPointStructure);
+let newPointStructure = transform(oldPointStructure);
 
-
-// console.log(transform(oldPointStructure['1']));
-// console.log(oldPointStructure['2']);
-// console.log(oldPointStructure['3']);
-// console.log(oldPointStructure['4']);
-// console.log(oldPointStructure['5']);
-// console.log(oldPointStructure['8']);
-// console.log(oldPointStructure['10']);
 
 
 
@@ -212,23 +218,67 @@ if (scoreChoice === "0") {
 
 
 
+function vowelBonusScorer(word) {
+   word = word.toUpperCase();
+   let vowelBonusPoints = "";
+   let totalScore = 0;
+
+   for (let i = 0; i < word.length; i++) {
+
+       for (let pointValue in vowelBonusStructure) {
+ 
+         if (vowelBonusStructure[pointValue].includes(word[i])) {
+           vowelBonusPoints += `\nPoints for '${word[i]}': ${pointValue}` 
+           totalScore += Number(pointValue);  
+
+         }
+  } 
+}  
+// return vowelBonusPoints;
+return totalScore + "\n" + vowelBonusPoints;
+
+}
 
 
+/* Could I make a loop that goes over the values for each key in the oldScrabbleStructure and convert them into lowercase, and then,
+take each individual elements(character) and turn into a key instead of a value. Would I be able to then assign that key the same name/var 
+as it's previous key?
+
+EXAMPLE::: So, I for...loop over oldSrabbleStructure. Each time it hits a new property/key it takes the values and transforms them into keys while assigning the keys the 
+value of the property/key that accessed it. 
+
+oldPointStructure[key][index]  ---  the [index] are the letters that we want to make keys in our newPointStructure and we want to assign their value to be the [key] they were accessed by
 
 
-function transform(oldStructure) {
+      1: ['A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'],
+      2: ['D', 'G'],
+      3: ['B', 'C', 'M', 'P'],
+      4: ['F', 'H', 'V', 'W', 'Y'],
+      5: ['K'],
+      8: ['J', 'X'],
+      10: ['Q', 'Z']
+*/
+
+function transform(oldPointStructure) {
    let newPoints;
-   for(let pointValue in oldPointStructure ) {
-      for(let i = 0; i < 7, i++;) {
-      newPoints[i] = oldPointStructure[pointValue].toLowerCase;   
-      }
 
 
-      
+   for(let pointValue in oldPointStructure ) {                                      //to iterate over the keys 1, 2, 3, 4, 5, 8, 10 , which is 6 indexes
+    
+      for(let i = 0; i < oldPointStructure.length, i++;) {
+         
+         newPoints += oldPointStructure[pointValue];
+         console.log(newPoints);                                 //means we are assigning newPoints to ----> object name : oldScrabbleStructure, iterating over the keys
+
+
+    
+      } 
       }
    return newPoints;
 
 };
+
+console.log(transform(oldPointStructure));
 
 
 // oldPointStructure[pointValue][i]   // isn't that saying point value is (the key) and then it will go through the indices within that property (the values array);
