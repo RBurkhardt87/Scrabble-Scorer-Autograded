@@ -13,31 +13,21 @@ const oldPointStructure = {
 };
 
 
-
-
-      /*This is the original scorer function we were provided-- I just added a totalScore variable so I could 
-      print the results to the user along with the individual points for each letter in the word. 
-      */
+  
 
 function oldScrabbleScorer(word) {
 	word = word.toUpperCase();
-	let letterPoints = "";
-   let totalScore = 0;
+	let totalScore = 0;
  
-	for (let i = 0; i < word.length; i++) {
- 
-	  for (const pointValue in oldPointStructure) {
- 
+	for (let i = 0; i < word.length; i++) { 
+	  for (const pointValue in oldPointStructure) { 
 		 if (oldPointStructure[pointValue].includes(word[i])) {
-			letterPoints += `\nPoints for '${word[i]}': ${pointValue}`;
-         totalScore += Number(pointValue);
+			totalScore += Number(pointValue);
       } 
-
 	  }
 	}
 	return Number(totalScore);
-   // return `You scored ${Number(totalScore)} points! \n ${letterPoints}`;
- }
+ };
 
 
 
@@ -49,7 +39,7 @@ function oldScrabbleScorer(word) {
       /*----TASK 1----//
       For the initial promt I just needed to set some if statements to validate the user input.
       I wanted to make sure that they entered a single word, a word with no numbers and of course 
-      no numbers at all. It is weird to me that I had to make to conditions to rule out words with 
+      no numbers at all. It is weird to me that I had to make two conditions to rule out words with 
       numbers in them and just outright numbers. The middle condition prevent words with numbers in 
       them. EX: mom9 but it would like me enter 90. So I did the last condition to stop 90 from going 
       through, but it would allow mom9 to work. So I left both inside the conditions. 
@@ -59,10 +49,9 @@ function initialPrompt() {
    word = input.question("Let's play some scrabble! \nEnter a word to score: ");
 
    for (let i = 0; i < word.length; i++) {
-   if(word.includes(" ") || !isNaN(word[i]) || word === Number) {
-      word = input.question("Invalid word. Please try again. Enter a single word with no numbers or spaces: \n");
-      
-   }
+      if (word.includes(" ") || !isNaN(word[i]) || word === Number) {
+         word = input.question("Invalid word. Please try again. Enter a single word with no numbers or spaces: \n");      
+      }
    }
 };
 
@@ -81,60 +70,41 @@ function initialPrompt() {
       at each key of oldscrabble I need to get the letters out of the array, convert them to lowercase, and put them into a new object structure...
       in for...in loop, we don't use index, we use the property/key. SO, loop over pointvalues, at each pointvalue take the letters in put into new object.
 
+      *******THINK 2D Array and how I access elements within 
+
       */
 
-
+      
 let newKeys;
 let newPointStructure = {};
-function transform(oldPointStructure) {
 
-
-   
+function transform(oldPointStructure) {   
    for (let property in oldPointStructure) {
-      // console.log(pointValue);
-       for (let i = 0; i < oldPointStructure[property].length; i++) {
-         newKeys = oldPointStructure[property];
-         // console.log(newKeys[i]);                                                          //shows that the letters are capitalized but looking like keys
-         
-         let makeLowerCase = newKeys[i].toLowerCase();
-         // console.log(makeLowerCase);                                                        
-         newPointStructure[makeLowerCase] = Number(property); 
-         
-       }
+      for (let i = 0; i < oldPointStructure[property].length; i++) {
+         newKeys = oldPointStructure[property];                                       
+         let lowerCaseKeys = newKeys[i].toLowerCase();
+         newPointStructure[lowerCaseKeys] = Number(property); 
+      }
    }
    return newPointStructure;
 };
 
 
+newPointStructure = transform(oldPointStructure);
 
-
-
-
-function scrabbleScorer(word) {
-newPointStructure = transform(oldPointStructure);	
-   
+function scrabbleScorer(word) { 
    word = word.toLowerCase();
-	let newPoints = "";
-   let totalScore = 0;
+	let totalScore = 0;
  
-  
-  for (let newKeys in newPointStructure) {
-	for (let i = 0; i < word.length; i++) {
-      if(newPointStructure[newKeys].includes(word[i])) {
-
-
-
-         newPoints += `\nPoints for '${word[i]}': ${newPointStructure[pointValue]}`;
-         totalScore += Number(pointValue);
-         
-      } 
-
-	  }
-	}
-   return Number(totalScore);
-   // return `Your word: ${word} scored ${totalScore} points! \n ${newPoints}`;
- }
-
+   for (let i = 0; i < word.length; i++) {         
+      for (let lowerCaseKeys in newPointStructure) {	
+         if(newPointStructure[lowerCaseKeys] === word[i]) {
+            totalScore += newPointStructure[lowerCaseKeys][pointValue];        
+         } 
+	   }
+   }   
+	return Number(totalScore);
+}
  
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -160,24 +130,22 @@ let simpleScorerStructure = {
       */
 
 function simpleScorer(word) {
-	// word = word.toUpperCase();
-   let simpleScorerPoints = "";
+	word = word.toUpperCase();
    let totalScore = 0;
 	 
    for (let i = 0; i < word.length; i++) {
-
       for (let pointValue in simpleScorerStructure) {
-
-        if (simpleScorerStructure[pointValue].includes(word[i].toUpperCase())) {
-          simpleScorerPoints += `\nPoints for '${word[i]}': ${pointValue}` 
-          totalScore += Number(pointValue);  
-
+        if (simpleScorerStructure[pointValue].includes(word[i])) {
+           totalScore += Number(pointValue);  
         }
       }
- } 
- return Number(totalScore);
- // return `Your word: ${word} scored ${Number(totalScore)} points! \n ${simpleScorerPoints}`;;
-};
+   } 
+   return Number(totalScore);
+ };
+
+
+
+
 
       /*----TASK 2.2----//
       Similar to simpleScorer, however, vowelBonusStructure object holds to key/value pairs. 
@@ -196,22 +164,16 @@ let vowelBonusStructure = {
 
 function vowelBonusScorer(word) {
    word = word.toUpperCase();
-   let vowelBonusPoints = "";
    let totalScore = 0;
 
    for (let i = 0; i < word.length; i++) {
-
-       for (let pointValue in vowelBonusStructure) {
- 
+      for (let pointValue in vowelBonusStructure) { 
          if (vowelBonusStructure[pointValue].includes(word[i])) {
-           vowelBonusPoints += `\nPoints for '${word[i]}': ${pointValue}` 
-           totalScore += Number(pointValue);  
-
+            totalScore += Number(pointValue);  
          }
-  } 
-}  
-return totalScore;
-// return `Your word: ${word} scored ${totalScore} points! \n ${vowelBonusPoints}`;
+      } 
+   }  
+   return totalScore;
 };
 
 
@@ -279,20 +241,24 @@ if (scoreChoice === "0") {
    }
 };
 
-function keepPlayingPrompt() {
-   keepPlaying = input.question('Would you like to play another word? Yes or No? ');
-   keepPlaying = keepPlaying.toUpperCase;
-for (let i = 0; i < keepPlaying.length; i++) {
-   if (keepPlaying === 'YES') {      
-      word = input.question('Pick another word: ');
-              
-      
-   }  else {
-     break;
+function keepPlayingPrompt() {   
+   keepPlaying = input.question('\nWould you like to play another word? Yes or No? ');
+   console.log('\n');
+   keepPlaying = keepPlaying.toUpperCase();
+
+   for (let i = 0; i < keepPlaying.length; i++) {
+
+      if (keepPlaying === 'YES') {      
+         initialPrompt();
+         scorerPrompt();
+         keepPlayingPrompt();
+         return;
+      }
    }
-}
-};                     
-         
+   return console.log('See you next time!!');     
+};  
+
+
 
 
 function runProgram() {
@@ -300,7 +266,8 @@ function runProgram() {
    scorerPrompt();
    keepPlayingPrompt()
    
-}
+   
+};
 
 
 
